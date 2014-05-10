@@ -3,7 +3,7 @@
 
 struct pair { char *key; int value; };
 
-int str_compare(void *k1, void *k2) {
+int str_compare(const void *k1, const void *k2, void *data) {
 	struct pair *p1 = (struct pair*)k1;
 	struct pair *p2 = (struct pair*)k2;
 	return strcmp((char*)p1->key, (char*)p2->key);
@@ -12,7 +12,7 @@ int str_compare(void *k1, void *k2) {
 int main(int argc, char **argv) {
 
 	struct skplst list;
-	skplst_init(&list, 3, 0.25, &str_compare);
+	skplst_init(&list, 3, 0.25, &str_compare, NULL, NULL, NULL);
 
 	struct pair test[] = {
 		{ "key4",  9 },
