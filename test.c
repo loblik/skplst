@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "skplst.h"
 
 struct pair { char *key; int value; };
