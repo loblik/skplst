@@ -6,9 +6,7 @@ struct skplst_iter {
 };
 
 struct skplst_elem {
-	int levels;
 	void *data;
-	//struct skplst_elem **next;
 	struct skplst_elem *next[0];
 };
 

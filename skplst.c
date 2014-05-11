@@ -5,7 +5,7 @@
 
 static int skplst_coin_flip_levels(struct skplst *list);
 static struct skplst_elem **skl_next_alloc(struct skplst *list, int levels);
-static struct skplst_elem *skplst_elem_create(struct skplst *list, void *data);
+static struct skplst_elem *skplst_elem_create(struct skplst *list, int *levs, void *data);
 static void skplst_elem_free(struct skplst *list, struct skplst_elem* to_free);
 static struct skplst_elem *skplst_find_elem(struct skplst *list, void *data);
 
@@ -42,7 +42,7 @@ struct skplst_elem **skl_next_alloc(struct skplst *list, int levels) {
 	return new_next;
 }
 
-struct skplst_elem *skplst_elem_create(struct skplst *list, void *data) {
+struct skplst_elem *skplst_elem_create(struct skplst *list, int *levs, void *data) {
 	int levels = skplst_coin_flip_levels(list);
 	struct skplst_elem *new =
 		(struct skplst_elem*)list->malloc_fnc(sizeof(struct skplst_elem) +
@@ -71,9 +71,9 @@ void *skplst_insert(struct skplst *list, void *data) {
 			i--;
 		}
 	}
-
-	struct skplst_elem *new_elem = skplst_elem_create(list, data);
-	for (i = 0; i < new_elem->levels; i++) {
+	int levels;
+	struct skplst_elem *new_elem = skplst_elem_create(list, &levels, data);
+	for (i = 0; i < levels; i++) {
 		new_elem->next[i] = *list->search_path[i];
 		*list->search_path[i] = new_elem;
 	}
@@ -95,7 +95,7 @@ void *skplst_delete(struct skplst *list, void *data) {
 	if (!to_delete || list->cmp_elem(data, to_delete->data, list->user_data) != 0)
 		return NULL;
 
-	for (i = 0; i < to_delete->levels; i++)
+	for (i = 0; i < list->max_levels && *list->search_path[i] == to_delete; i++)
 		*list->search_path[i] = to_delete->next[i];
 
 	void *deleted_data = to_delete->data;
