@@ -46,8 +46,8 @@ struct skplst_elem *skplst_elem_create(struct skplst *list, int *levs, void *dat
 	int levels = skplst_coin_flip_levels(list);
 	struct skplst_elem *new =
 		(struct skplst_elem*)list->malloc_fnc(sizeof(struct skplst_elem) +
-				sizeof(struct skplst_elem*)*(levels));
-	new->levels = levels;
+				sizeof(struct skplst_elem*)*(levels - 1));
+	*levs = levels;
 	new->data = data;
 	memset(new->next, 0, levels*sizeof(struct skplst_elem*));
 	return new;

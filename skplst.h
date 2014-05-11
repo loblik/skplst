@@ -7,7 +7,7 @@ struct skplst_iter {
 
 struct skplst_elem {
 	void *data;
-	struct skplst_elem *next[0];
+	struct skplst_elem *next[1];
 };
 
 struct skplst {
